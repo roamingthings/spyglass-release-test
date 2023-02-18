@@ -27,7 +27,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cz check --rev-range main..$(git rev-parse HEAD)
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+          git remote add upstream https://github.com/$GITHUB_REPOSITORY.git
+          git fetch upstream $GITHUB_BASE_REF
+          git merge-base --is-ancestor $GITHUB_BASE_REF $GITHUB_HEAD_REF
+          if [ $? -ne 0 ]; then
+            git fetch upstream $GITHUB_HEAD_REF
+            git merge-base --is-ancestor $GITHUB_BASE_REF FETCH_HEAD
+            if [ $? -ne 0 ]; then
+              echo "Commit messages validation failed. Please make sure your commit messages comply with the conventional commits specification."
+              exit 1
+            fi
+          fi
+          cz check --rev-range main..HEAD
 
       - name: Validate pull request title
         env:
