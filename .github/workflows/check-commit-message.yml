@@ -27,7 +27,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cz check --rev-range origin/main..$(git rev-parse HEAD)
+          cz check --rev-range main..$(git rev-parse HEAD)
 
       - name: Validate pull request title
         env:
