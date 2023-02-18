@@ -1,3 +1,10 @@
+## V0.2.1 (2023-02-18)
+
+### Fix
+
+- Some fix of the application
+- Fix release files
+
 ## V0.2.0 (2023-02-18)
 
 ### Feat
