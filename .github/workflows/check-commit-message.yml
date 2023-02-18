@@ -22,6 +22,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git status
+          cz check --rev-range main..HEAD
           title=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
           echo $title
           commit_range=${{ github.ref_name }}
