@@ -1,8 +1,7 @@
 name: Enforce conventional commits
 on:
-#  pull_request:
   pull_request_review:
-#    types: [submitted]
+    types: [submitted]
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -26,16 +25,3 @@ jobs:
         run: |
           cz check --rev-range origin/main..HEAD
           echo ${{ github.event.pull_request.title }} | cz check
-#          title=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
-#          echo $title
-#          commit_range=${{ github.ref_name }}
-#          echo $commit_range
-#          echo $(git log --format=%B "$commit_range")
-#          if ! cz check --message "$title"; then
-#            echo "The pull request title does not comply with the conventional commits specification."
-#            exit 1
-#          fi
-#          if ! git log --format=%B "$commit_range" | cz check --message; then
-#            echo "One or more commit messages in the pull request do not comply with the conventional commits specification."
-#            exit 1
-#          fi
