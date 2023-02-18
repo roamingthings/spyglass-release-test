@@ -1,3 +1,19 @@
+## V0.3.0 (2023-02-18)
+
+### Feat
+
+- Add script to check commit message
+
+### Fix
+
+- Add submitted
+- further fixing
+- further fixing
+- Further fixes
+- Further changes
+- Debug
+- Fix script
+
 ## V0.2.2 (2023-02-18)
 
 ### Fix
