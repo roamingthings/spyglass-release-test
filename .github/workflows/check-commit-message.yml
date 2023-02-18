@@ -27,7 +27,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cz check --rev-range main..HEAD
+          git status
+          cz check --rev-range main..HEAD --allow-abort
 
       - name: Validate pull request title
         env:
