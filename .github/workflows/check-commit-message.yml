@@ -7,7 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -16,22 +19,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install commitizen
-      - name: Configure Commitizen
-        run: commitizen init cz_conventional_commits --force
       - name: Validate pull request title and commit messages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          title=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
-          echo $title
-          commit_range=$(jq -r '.pull_request.commits_url' "$GITHUB_EVENT_PATH" | cut -d/ -f7-)
-          echo $commit_range
-          echo $(git log --format=%B "$commit_range")
-          if ! cz check --message "$title"; then
-            echo "The pull request title does not comply with the conventional commits specification."
-            exit 1
-          fi
-          if ! git log --format=%B "$commit_range" | cz check --message; then
-            echo "One or more commit messages in the pull request do not comply with the conventional commits specification."
-            exit 1
-          fi
+          cz check --rev-range origin/main..HEAD
+          echo ${{ github.event.pull_request.title }} | cz check
