@@ -7,7 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+            ref: ${{ github.event.pull_request.head.sha }}
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -22,7 +24,7 @@ jobs:
         run: |
           title=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
           echo $title
-          commit_range=$(jq -r '.pull_request.commits_url' "$GITHUB_EVENT_PATH" | cut -d/ -f7-)
+          commit_range=${{ github.ref_name }}
           echo $commit_range
           echo $(git log --format=%B "$commit_range")
           if ! cz check --message "$title"; then
