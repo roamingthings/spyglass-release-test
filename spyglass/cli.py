@@ -46,6 +46,8 @@ def main(args=None):
     output = StreamingOutput()
     picam2.start_recording(MJPEGEncoder(), FileOutput(output))
 
+    print("some new feature")
+
     try:
         run_server(bind_address, port, output, stream_url, snapshot_url)
     finally:
