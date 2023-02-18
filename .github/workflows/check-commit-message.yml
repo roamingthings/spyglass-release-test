@@ -1,49 +1,37 @@
-name: Pull Request
-
+name: Enforce conventional commits
 on:
-  pull_request: {}
-
+  pull_request_review:
+    types: [submitted]
 jobs:
-  build:
-    name: Check commit message
+  validate:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v2
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
-          python-version: '3.10'
-          cache: 'pip'
-
+          python-version: '3.x'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install commitizen
-
-      - name: Validate commit messages of this branch
+      - name: Configure Commitizen
+        run: commitizen init cz_conventional_commits --force
+      - name: Validate pull request title and commit messages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "GitHub Actions"
-          git remote add upstream https://github.com/$GITHUB_REPOSITORY.git
-          git fetch upstream $GITHUB_BASE_REF
-          git merge-base --is-ancestor $GITHUB_BASE_REF $GITHUB_HEAD_REF
-          if [ $? -ne 0 ]; then
-            git fetch upstream $GITHUB_HEAD_REF
-            git merge-base --is-ancestor $GITHUB_BASE_REF FETCH_HEAD
-            if [ $? -ne 0 ]; then
-              echo "Commit messages validation failed. Please make sure your commit messages comply with the conventional commits specification."
-              exit 1
-            fi
+          title=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
+          echo $title
+          commit_range=$(jq -r '.pull_request.commits_url' "$GITHUB_EVENT_PATH" | cut -d/ -f7-)
+          echo $commit_range
+          echo $(git log --format=%B "$commit_range")
+          if ! cz check --message "$title"; then
+            echo "The pull request title does not comply with the conventional commits specification."
+            exit 1
           fi
-#          cz check --rev-range main..HEAD
-
-      - name: Validate pull request title
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cz check --message ${{ github.event.pull_request.title }}
+          if ! git log --format=%B "$commit_range" | cz check --message; then
+            echo "One or more commit messages in the pull request do not comply with the conventional commits specification."
+            exit 1
+          fi
