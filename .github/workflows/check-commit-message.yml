@@ -1,7 +1,7 @@
 name: Enforce conventional commits
 on:
   pull_request_review:
-    types: [submitted]
+#    types: [submitted]
 jobs:
   validate:
     runs-on: ubuntu-latest
