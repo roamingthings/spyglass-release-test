@@ -1,3 +1,10 @@
+## v0.5.0 (2023-02-19)
+
+### Feat
+
+- Add version file
+- Test commitizen configuration
+
 ## v0.4.0 (2023-02-18)
 
 ### Fix
