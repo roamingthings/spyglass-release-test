@@ -1,3 +1,6 @@
+[project]
+version = "0.5.0"
+
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = ["setuptools", "wheel"]
@@ -17,5 +20,6 @@ version = "0.5.0"
 tag_format = "v$version"
 version_files = [
     "spyglass/__version__.py",
-    "pyproject.toml:version"
+    "pyproject.toml:version",
+    "README.md"
 ]
