@@ -1,3 +1,9 @@
+## v0.7.0 (2023-02-19)
+
+### Feat
+
+- More version experiments
+
 ## v0.6.0 (2023-02-19)
 
 ### Feat
