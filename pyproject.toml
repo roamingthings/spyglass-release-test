@@ -21,5 +21,5 @@ tag_format = "v$version"
 version_files = [
     "spyglass/__version__.py",
     "pyproject.toml:version",
-    "README.md"
+    "README.md:Current version"
 ]

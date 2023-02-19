@@ -1,5 +1,5 @@
 # THIS IS JUST A TEMPORARY REPOSITORY
 
-test3
+Current version: 0.6.0
 
-Current Version: 0.6.0
+Not the version but looking similar 0.6.0
